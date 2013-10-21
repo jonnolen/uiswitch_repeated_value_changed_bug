@@ -9,7 +9,7 @@
 #import "DTViewController.h"
 
 @interface DTViewController ()
-
+@property (nonatomic, weak) IBOutlet UITextView *textView;
 @end
 
 @implementation DTViewController
@@ -26,4 +26,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)switchChanged:(UISwitch *)sender{
+    static BOOL background = NO;
+    NSMutableAttributedString *newString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@-changed to %@\n", [NSDate date], (sender.isOn ? @"On": @"Off")]];
+    if (background){
+        [newString addAttribute:NSBackgroundColorAttributeName value:[UIColor lightGrayColor] range:NSMakeRange(0, newString.length)];
+    }
+    [newString insertAttributedString:_textView.attributedText atIndex:0];
+    _textView.attributedText = newString;
+    background = !background;
+    [_textView scrollRangeToVisible:NSMakeRange(_textView.attributedText.length -1, 1)];
+}
 @end
